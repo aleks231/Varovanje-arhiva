@@ -1,0 +1,22 @@
+import RPi.GPIO as GPIO
+import time
+
+GPIO.setwarnings(False)
+GPIO.setmode(GPIO.BOARD)
+GPIO.setup(7, GPIO.IN)         #Prebere podatke iz PIR senzorja
+GPIO.setup(11, GPIO.OUT)         #Rele izhod
+wasTriggered = False
+
+while True:
+    i=GPIO.input(7)
+    print(i)
+    if i==0:                 #Ko PIR senzor vrne nizko vrednost
+        print ("No motion detected"),i
+        wasTriggered = False
+        GPIO.output(11, 0)  #Izklopi rele
+        time.sleep(0.1)
+    elif i==1:               #Ko PIR senzor vrne visoko vrednost
+        if wasTriggered == False:
+            print ("Motion detected"),i
+            GPIO.output(11, 1)  #Vklopi rele
+            wasTriggered = True
